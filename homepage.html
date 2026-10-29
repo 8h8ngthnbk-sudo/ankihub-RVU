@@ -78,6 +78,9 @@ button:disabled{opacity:.55;cursor:default}
 .btn-link{display:inline-flex;align-items:center;font-weight:600;font-size:14px;text-decoration:none;border-radius:8px;padding:8px 14px;background:var(--accent);border:1px solid var(--accent);color:var(--on-accent)}
 .btn-link:hover{filter:brightness(1.08)}
 .btn-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-link{display:inline-flex;align-items:center;font-weight:600;font-size:14px;text-decoration:none;border-radius:8px;padding:8px 14px;background:var(--accent);border:1px solid var(--accent);color:var(--on-accent)}
+.btn-link:hover{filter:brightness(1.08)}
+.btn-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .addon-points{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 details.how code,.addon code{font-family:var(--mono);font-size:12.5px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 5px;color:var(--ink)}
 details.how ol.plain{list-style:none;padding-left:0}
@@ -232,16 +235,14 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
         <li>Add your own picture or GIF and it shows above the banner (steps below).</li>
       </ul>
       <div class="actions">
-        <button type="button" class="primary" id="dlAddon">Download add-on</button>
-        <span class="flash" id="dlMsg" role="status"></span>
+        <a class="btn-link" href="lets_go_streak.ankiaddon" download="lets_go_streak.ankiaddon">Download add-on</a>
       </div>
     </article>
 
     <details class="how" open>
       <summary>How to install</summary>
       <ol>
-        <li>Click <b>Download add-on</b>. You'll get <code>lets_go_streak.zip</code>.</li>
-        <li>Rename it so it ends in <code>.ankiaddon</code> instead of <code>.zip</code> (for example <code>lets_go_streak.ankiaddon</code>). On Windows, turn on file name extensions first so it doesn't end up as <code>.ankiaddon.zip</code>.</li>
+        <li>Click <b>Download add-on</b>. You'll get <code>lets_go_streak.ankiaddon</code>.</li>
         <li>Double-click the file, or in Anki go to <b>Tools → Add-ons → Install from file…</b> and pick it.</li>
         <li>Restart Anki. <b>Let's Go Streak</b> should be listed under <b>Tools → Add-ons</b>.</li>
         <li>To test quickly, open <b>Tools → Add-ons → Config</b>, set <code>streak_target</code> to <code>2</code>, do a few reviews, then set it back to <code>10</code>.</li>
@@ -488,19 +489,6 @@ const IBRA_NOTE = `<div class="callout"><strong>Install an Anki add-on first</st
   $('tab-addons').addEventListener('click', ()=>{ showTab('addons'); location.hash='addons'; });
   window.addEventListener('hashchange', ()=>showTab(location.hash==='#addons'?'addons':'lists'));
   showTab(location.hash==='#addons'?'addons':'lists');
-  $('dlAddon').addEventListener('click', async ()=>{
-    const msg=$('dlMsg'); msg.textContent='';
-    try{
-      if(downloadsNS===undefined) downloadsNS = await window.claude?.use?.('downloads') || null;
-      if(!downloadsNS){ msg.textContent='Downloads aren\'t available in this view. Open the site in a browser and sign in to claude.ai, then try again.'; return; }
-      const bin = Uint8Array.from(atob(ADDON_B64), c=>c.charCodeAt(0));
-      await downloadsNS.save({filename:'lets_go_streak.zip', data:bin});
-      msg.textContent='Saved as a .zip. Rename it to lets_go_streak.ankiaddon, then install (steps below).';
-    }catch(err){
-      const c = err && err.code;
-      msg.textContent = c==='declined' ? '' : c==='rate_limited' ? 'A download prompt is already open.' : 'Couldn\'t start the download. Reload and try again.';
-    }
-  });
   render();
   (async ()=>{
     try{
