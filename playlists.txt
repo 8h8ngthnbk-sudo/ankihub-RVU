@@ -1,0 +1,7 @@
+# Table 10 Deck playlists
+# One playlist per line:  Name | Spotify link | optional note
+# Get the link in Spotify: open the playlist > ... (three dots) > Share > Copy link to playlist
+# Lines starting with # are ignored. Save (commit) and the site updates in about a minute.
+#
+# Example (remove the # at the start to use it):
+# Deep Focus | https://open.spotify.com/playlist/PASTE-YOUR-LINK-HERE | Lo-fi for long Anki sessions
