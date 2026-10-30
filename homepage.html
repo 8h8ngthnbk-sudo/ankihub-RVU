@@ -231,6 +231,40 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
 #open{scroll-margin-top:72px}
 @media (max-width:700px){#open{scroll-margin-top:118px}}
 .late-foot .cp{font-family:var(--body)}
+.hero .nuke{position:absolute;top:22px;right:max(16px,env(safe-area-inset-right,0px));margin:0}
+@media (max-width:560px){.hero .nuke{top:12px;transform:scale(.6);transform-origin:top right}}
+.why-lede{font-size:17px;line-height:1.65;max-width:68ch;margin:0 0 14px}
+.why-lede:last-child{margin-bottom:0}
+.reasons{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:14px}
+.reason{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.reason h3{margin:0;font-family:var(--display);font-size:22px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1.1}
+.reason p{margin:0;color:var(--muted);font-size:14.5px}
+.route{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;position:relative}
+.route::before{content:"";position:absolute;left:10px;right:10px;top:9px;border-top:3px dashed var(--accent)}
+.route li{position:relative;display:flex;flex-direction:column;gap:4px;padding-top:32px}
+.route .stop{position:absolute;top:0;left:0;width:21px;height:21px;border-radius:50%;background:var(--paper);border:3px solid var(--accent);box-sizing:border-box}
+.route li:last-child .stop{background:var(--accent)}
+.route b{font-family:var(--display);font-size:19px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1.1}
+.route span:not(.stop){color:var(--muted);font-size:14px}
+@media (max-width:760px){
+  .route{grid-template-columns:1fr;gap:20px;padding-left:36px}
+  .route::before{left:9px;right:auto;top:10px;bottom:10px;border-top:0;border-left:3px dashed var(--accent)}
+  .route li{padding-top:0}
+  .route .stop{left:-36px}
+}
+.steps{margin:0;padding-left:24px;display:flex;flex-direction:column;gap:10px;max-width:72ch}
+.steps li{padding-left:4px}
+.steps li::marker{font-family:var(--display);font-weight:700;font-size:18px;color:var(--accent)}
+.tip{margin:18px 0 0;max-width:72ch;background:var(--surface);border:1.5px dashed var(--line);border-radius:10px;padding:12px 16px}
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.link{display:flex;flex-direction:column;gap:3px;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;transition:border-color .15s,transform .15s}
+.link:hover{border-color:var(--ink);transform:translateY(-2px)}
+.link b{font-size:16px}
+.link span:last-child{color:var(--muted);font-size:13.5px}
+.lk-kind{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.link.feature{background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:4px 4px 0 var(--accent)}
+.link.feature span:last-child{color:color-mix(in srgb,var(--bg) 78%,transparent)}
+.link.feature .lk-kind{color:color-mix(in srgb,var(--accent) 55%,var(--bg))}
 </style>
 </head>
 <body>
@@ -239,6 +273,7 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
     <a class="brand" href="#" data-view="lists"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="1.5" y="1.5" width="29" height="29" rx="6" fill="var(--accent)"/><path d="M5,24 L12,12 L16,18 L19,14 L27,24 Z" fill="var(--paper)"/><text x="16" y="11" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" font-weight="500" fill="var(--paper)">10</text></svg>Table 10 Deck</a>
     <nav aria-label="Site">
       <a href="#" data-view="lists" id="nav-lists">Card lists</a>
+      <a href="#how-to" data-view="howto" id="nav-howto">How to &amp; Why</a>
       <a href="#addons" data-view="addons" id="nav-addons">Add-ons</a>
       <a href="#playlists" data-view="playlists" id="nav-playlists">Playlists</a>
       <a href="https://nobledodge99-cloud.github.io/study-guides/index.html" target="_blank" rel="noopener">Study guides ↗</a>
@@ -286,6 +321,80 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
       <section class="hide-search"><h2 class="sec">Latest lists <small>newest first</small></h2><div class="latest" id="latest"></div></section>
       <section class="hide-search"><h2 class="sec">Pick your trail <small>click a course</small></h2><div class="grid" id="grid"></div></section>
       <section id="open" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <div id="view-howto" class="view" hidden>
+    <main>
+      <section class="why-intro">
+        <h2 class="sec">Why Anki? <small>and why AnKing is worth your time</small></h2>
+        <p class="why-lede">Anki is a free flashcard app built on two of the best-supported ideas in learning science: <b>active recall</b> (testing yourself instead of rereading) and <b>spaced repetition</b> (seeing a fact again right before you'd forget it). Each time you answer a card, Anki decides when you'll see it next. Cards you miss come back soon, and cards you know get pushed out to days, weeks and then months. You spend your time on what you're about to forget, not on what you already know.</p>
+        <p class="why-lede">The <b>AnKing Step deck</b> is the premade deck most med students use. It covers Step 1/Level 1 and Step 2/Level 2 material, so nobody has to spend hours making cards. Cards are tagged by resource (Boards &amp; Beyond, Sketchy, First Aid, UWorld question IDs and more), which is how this site matches cards to RVU lectures. Through AnkiHub, the deck stays up to date as students and the AnKing team fix and improve cards.</p>
+      </section>
+
+      <section>
+        <h2 class="sec">Why it pays off <small>not just for Level 1</small></h2>
+        <div class="reasons">
+          <article class="reason">
+            <span class="mk"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="var(--green)"/></svg></span>
+            <h3>Two exams with one deck</h3>
+            <p>Unsuspend the cards for each lecture as you go and you study for in-house exams and boards at the same time. When dedicated starts, most of First Aid is already in your reviews instead of being new.</p>
+          </article>
+          <article class="reason">
+            <span class="mk"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="12" height="12" fill="var(--blue)"/></svg></span>
+            <h3>Level 2 builds on Level 1</h3>
+            <p>COMLEX Level 2-CE and Step 2 CK assume you still know your physiology, path and pharm, then add diagnosis and management. Cards stay in rotation through third year, so you keep that base instead of relearning it before shelves.</p>
+          </article>
+          <article class="reason">
+            <span class="mk"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.4" y="3.4" width="9.2" height="9.2" transform="rotate(45 8 8)" fill="var(--ink)"/></svg></span>
+            <h3>The deck grows with you</h3>
+            <p>The same AnKing deck has Step 2 and shelf content too. On rotations you unsuspend more of it, and your reviews and history carry over. You never have to start a new system.</p>
+          </article>
+          <article class="reason">
+            <span class="mk"><svg viewBox="0 0 28 16" aria-hidden="true"><rect x="3.4" y="3.4" width="9.2" height="9.2" transform="rotate(45 8 8)" fill="var(--ink)"/><rect x="15.4" y="3.4" width="9.2" height="9.2" transform="rotate(45 20 8)" fill="var(--ink)"/></svg></span>
+            <h3>The evidence backs it</h3>
+            <p>In a study of preclinical students, the number of unique Anki cards students had seen predicted higher Step 1 scores, even after accounting for other factors. It was one school and self-reported, but it matches decades of research on retrieval practice.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="sec">The trail <small>where Anki fits in med school</small></h2>
+        <ol class="route">
+          <li><span class="stop"></span><b>MS1–MS2 lectures</b><span>Unsuspend each lecture's cards with this site. Do your reviews every day.</span></li>
+          <li><span class="stop"></span><b>IBRAs and dedicated</b><span>Use UWorld question IDs to pull the cards for questions you missed.</span></li>
+          <li><span class="stop"></span><b>COMLEX Level 1 / Step 1</b><span>If you've kept up, most of what's tested is already in your reviews, so dedicated is review instead of first exposure.</span></li>
+          <li><span class="stop"></span><b>Third-year shelves</b><span>Unsuspend shelf-tagged cards for each rotation. Your Level 1 cards keep running.</span></li>
+          <li><span class="stop"></span><b>COMLEX Level 2-CE / Step 2 CK</b><span>Same deck, same habit. You're building on everything from second year.</span></li>
+        </ol>
+      </section>
+
+      <section>
+        <h2 class="sec">Get started <small>about 30 minutes</small></h2>
+        <ol class="steps">
+          <li><b>Download Anki.</b> It's free on Windows, Mac, Linux and Android. The iPhone app, AnkiMobile, is a one-time purchase (about $25) that pays for Anki's development. Make a free AnkiWeb account so your phone and computer stay in sync.</li>
+          <li><b>Get the AnKing deck through AnkiHub.</b> Install the AnkiHub add-on and subscribe to the AnKing Step deck. That needs an AnkiHub membership, and it's what keeps the deck updated. The video below walks through it.</li>
+          <li><b>Suspend everything to start.</b> Then unsuspend cards only as you cover them in lecture. That's exactly what the lists on this site are for.</li>
+          <li><b>Do your reviews every day.</b> Missing days is what makes Anki feel impossible, because reviews pile up. Keep new cards to what you can actually review tomorrow.</li>
+          <li><b>Be honest with Again.</b> If you didn't know it, press Again. Pressing Good on cards you missed only means you'll miss them on the exam.</li>
+        </ol>
+        <p class="tip"><b>Learn it, then Anki it.</b> Anki is for remembering, not for learning something the first time. Watch the lecture or Boards &amp; Beyond video first, then unsuspend the cards.</p>
+      </section>
+
+      <section>
+        <h2 class="sec">Helpful links</h2>
+        <div class="links">
+          <a class="link feature" href="https://youtu.be/dih2D1dwqkw?si=EqXLT9aNQ0zUYP_D" target="_blank" rel="noopener"><span class="lk-kind">Video · start here</span><b>Intro to Anki, the AnKing Step Deck &amp; AnkiHub</b><span>AnKing's beginner tutorial: setup, the deck, AnkiHub and how to study with it.</span></a>
+          <a class="link" href="https://youtu.be/a_AwLfSoIl4?si=6wmURu4xkS1V3Lfk" target="_blank" rel="noopener"><span class="lk-kind">Video</span><b>Anki tips</b><span>The video behind the red button, if you didn't dare press it.</span></a>
+          <a class="link" href="https://apps.ankiweb.net" target="_blank" rel="noopener"><span class="lk-kind">Download</span><b>Anki</b><span>The official download page for every platform.</span></a>
+          <a class="link" href="https://www.ankihub.net" target="_blank" rel="noopener"><span class="lk-kind">Deck</span><b>AnkiHub</b><span>Where you subscribe to the AnKing deck and get its updates.</span></a>
+          <a class="link" href="https://www.ankingmed.com" target="_blank" rel="noopener"><span class="lk-kind">Guides</span><b>AnKing</b><span>The team behind the deck, with guides and more videos.</span></a>
+          <a class="link" href="https://docs.ankiweb.net" target="_blank" rel="noopener"><span class="lk-kind">Manual</span><b>Anki manual</b><span>The official docs for every setting and feature.</span></a>
+          <a class="link" href="https://www.ama-assn.org/medical-students/usmle-step-1-2/what-anki" target="_blank" rel="noopener"><span class="lk-kind">Article</span><b>What is Anki? (AMA)</b><span>A short explainer from the American Medical Association.</span></a>
+          <a class="link" href="https://link.springer.com/article/10.1007/s40037-015-0220-x" target="_blank" rel="noopener"><span class="lk-kind">Research</span><b>Anki and Step 1 scores</b><span>Deng et al., <i>Perspectives on Medical Education</i>, 2015.</span></a>
+          <a class="link" href="https://www.reddit.com/r/medicalschoolanki/" target="_blank" rel="noopener"><span class="lk-kind">Community</span><b>r/medicalschoolanki</b><span>Where people ask every Anki question you'll have.</span></a>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -563,14 +672,16 @@ $('grid').addEventListener('click', e => {
 $('q').addEventListener('input', () => { if($('view-lists').hidden) showView('lists'); renderOpen(); });
 
 // ---------- views + routing ----------
-const VIEWS = ['lists','addons','playlists'];
+const VIEWS = ['lists','howto','addons','playlists'];
+const VIEW_HASH = {howto: 'how-to', addons: 'addons', playlists: 'playlists'};
 function showView(v){
   VIEWS.forEach(x => { $('view-' + x).hidden = x !== v; $('nav-' + x).classList.toggle('on', x === v); });
   if(v === 'playlists') loadPlaylists();
 }
 function route(scroll){
   const h = decodeURIComponent(location.hash.slice(1));
-  if(h === 'addons' || h === 'playlists'){ showView(h); if(scroll) window.scrollTo({top: 0}); return; }
+  const v = Object.keys(VIEW_HASH).find(k => VIEW_HASH[k] === h);
+  if(v){ showView(v); if(scroll) window.scrollTo({top: 0}); return; }
   showView('lists');
   const c = COURSES.find(x => x.slug === h && x.lists.length);
   if(c){
