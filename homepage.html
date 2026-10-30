@@ -90,6 +90,18 @@ button:disabled{opacity:.55;cursor:default}
 .addon-points{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 details.how code,.addon code{font-family:var(--mono);font-size:12.5px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 5px;color:var(--ink)}
 details.how ol.plain{list-style:none;padding-left:0}
+.lockin-head{display:flex;gap:14px;align-items:flex-start}
+.lockin-head h2{margin:0 0 4px;font-family:var(--display);font-size:24px}
+.lockin-icon{width:40px;height:40px;flex:none;color:#1db954;background:var(--accent-soft);border-radius:10px;padding:7px;box-sizing:border-box}
+.pl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:16px}
+.pl{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.pl-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.pl h3{margin:0;font-size:16px;font-weight:600}
+.pl .note{font-size:13px}
+.pl iframe{display:block;width:100%;height:352px;border:0;border-radius:12px;background:var(--bg)}
+.pl-open{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;white-space:nowrap}
+.pl-open:hover{text-decoration:underline}
+.pl-grid .empty code{font-family:var(--mono);font-size:12.5px;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 5px;color:var(--ink)}
 .sister{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .guides{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;text-decoration:none;color:var(--on-accent);background:var(--accent);border:1px solid var(--accent);border-radius:8px;padding:9px 16px}
 .guides:hover{filter:brightness(1.08)}
@@ -178,6 +190,7 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
   <div class="tabs" role="tablist" aria-label="Sections">
     <button type="button" role="tab" id="tab-lists" aria-controls="view-lists" aria-selected="true">Card lists</button>
     <button type="button" role="tab" id="tab-addons" aria-controls="view-addons" aria-selected="false">Add-ons</button>
+    <button type="button" role="tab" id="tab-playlists" aria-controls="view-playlists" aria-selected="false">Playlists</button>
   </div>
 
   <div id="view-lists" role="tabpanel" aria-labelledby="tab-lists" class="view">
@@ -276,6 +289,16 @@ footer{font-size:12px;color:var(--muted);border-top:1px solid var(--line);paddin
         <li><code>text</code>: the banner text, if you want something cleaner for the library</li>
       </ol>
     </details>
+  </section>
+
+  <section id="view-playlists" role="tabpanel" aria-labelledby="tab-playlists" class="view" hidden>
+    <div class="lockin">
+      <div class="lockin-head">
+        <svg class="lockin-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4,15 v-3 a8,8 0 0 1 16,0 v3"/><rect x="3" y="14" width="4.5" height="7" rx="1.5" fill="currentColor"/><rect x="16.5" y="14" width="4.5" height="7" rx="1.5" fill="currentColor"/></svg>
+        <div><h2>Lock in</h2><p class="lede">Playlists from Table 10 for long Anki sessions. Press play here, or open one in Spotify so it keeps going while you review.</p></div>
+      </div>
+    </div>
+    <div class="pl-grid" id="plGrid"></div>
   </section>
 
   <svg class="fence" viewBox="0 0 860 22" preserveAspectRatio="none" aria-hidden="true"><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M0,8 H860 M0,16 H860"/><path d="M20,3 v19 M120,3 v19 M220,3 v19 M320,3 v19 M420,3 v19 M520,3 v19 M620,3 v19 M720,3 v19 M820,3 v19"/></g></svg>
@@ -485,17 +508,56 @@ const IBRA_NOTE = `<div class="callout"><strong>Install an Anki add-on first</st
 
   const nuke=$('nuke'), cover=$('nukeCover'), nbtn=$('nukeBtn');
   cover.addEventListener('click', ()=>{ const o=!nuke.classList.contains('open'); nuke.classList.toggle('open',o); cover.setAttribute('aria-expanded',o); cover.setAttribute('aria-label',o?'Close the safety cover':'Lift the safety cover'); nbtn.tabIndex=o?0:-1; if(o) setTimeout(()=>nbtn.focus({preventScroll:true}),300); });
-  const ADDON_B64 = "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";
-  let downloadsNS;
+  const TABS = ['lists','addons','playlists'];
   function showTab(name){
-    const addons = name==='addons';
-    $('view-lists').hidden = addons; $('view-addons').hidden = !addons;
-    $('tab-lists').setAttribute('aria-selected', !addons); $('tab-addons').setAttribute('aria-selected', addons);
+    if(!TABS.includes(name)) name='lists';
+    TABS.forEach(t=>{ $('view-'+t).hidden = t!==name; $('tab-'+t).setAttribute('aria-selected', t===name); });
+    if(name==='playlists') loadPlaylists();
   }
-  $('tab-lists').addEventListener('click', ()=>{ showTab('lists'); try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} });
-  $('tab-addons').addEventListener('click', ()=>{ showTab('addons'); location.hash='addons'; });
-  window.addEventListener('hashchange', ()=>showTab(location.hash==='#addons'?'addons':'lists'));
-  showTab(location.hash==='#addons'?'addons':'lists');
+  TABS.forEach(t=>$('tab-'+t).addEventListener('click', ()=>{
+    showTab(t);
+    if(t==='lists'){ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} }
+    else location.hash = t;
+  }));
+  window.addEventListener('hashchange', ()=>showTab(location.hash.slice(1)));
+
+  // Playlists come from playlists.txt next to this page: one per line, "Name | Spotify link | optional note"
+  let plLoaded = false;
+  const SPOTIFY = /open\.spotify\.com\/(?:intl-[a-z-]+\/)?(playlist|album|track|show|episode)\/([A-Za-z0-9]+)/i;
+  function parsePlaylists(text){
+    return text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l && !l.startsWith('#')).map(l=>{
+      const parts = l.split('|').map(x=>x.trim());
+      const urlIdx = parts.findIndex(x=>SPOTIFY.test(x));
+      if(urlIdx<0) return null;
+      const m = parts[urlIdx].match(SPOTIFY);
+      const rest = parts.filter((_,i)=>i!==urlIdx);
+      return { name: rest[0] || 'Playlist', note: rest.slice(1).join(' · '), type: m[1].toLowerCase(), id: m[2] };
+    }).filter(Boolean);
+  }
+  async function loadPlaylists(){
+    if(plLoaded) return; plLoaded = true;
+    const grid = $('plGrid');
+    grid.innerHTML = '<div class="empty"><strong>Loading playlists…</strong></div>';
+    let list = [];
+    try{
+      const r = await fetch('playlists.txt', {cache:'no-cache'});
+      if(r.ok) list = parsePlaylists(await r.text());
+    }catch(e){}
+    if(!list.length){
+      grid.innerHTML = '<div class="empty"><strong>No playlists yet</strong>Add Spotify links to <code>playlists.txt</code> in the site\'s GitHub repo and they\'ll show up here.</div>';
+      return;
+    }
+    grid.innerHTML = list.map(p=>{
+      const open = 'https://open.spotify.com/'+p.type+'/'+p.id;
+      const embed = 'https://open.spotify.com/embed/'+p.type+'/'+p.id+'?utm_source=generator';
+      return `<article class="pl">
+        <div class="pl-top"><h3>${esc(p.name)}</h3><a class="pl-open" href="${open}" target="_blank" rel="noopener">Open in Spotify ↗</a></div>
+        ${p.note?`<p class="note">${esc(p.note)}</p>`:''}
+        <iframe src="${embed}" title="${esc(p.name)} on Spotify" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </article>`;
+    }).join('');
+  }
+  showTab(location.hash.slice(1));
   $('shareBtn').addEventListener('click', async ()=>{
     const url = location.href.split('#')[0];
     const btn = $('shareBtn'), txt = $('shareTxt');
