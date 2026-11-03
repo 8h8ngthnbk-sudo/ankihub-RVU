@@ -265,6 +265,34 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
 .link.feature{background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:4px 4px 0 var(--accent)}
 .link.feature span:last-child{color:color-mix(in srgb,var(--bg) 78%,transparent)}
 .link.feature .lk-kind{color:color-mix(in srgb,var(--accent) 55%,var(--bg))}
+.guide{display:flex;flex-direction:column;gap:20px}
+.guide-head{display:flex;align-items:center;gap:14px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.guide-head h2{margin:0;font-family:var(--display);font-size:40px;font-weight:700;text-transform:uppercase;line-height:1}
+.guide-head p{margin:2px 0 0;font:500 13px var(--mono);color:var(--muted)}
+.guide-icon{width:52px;height:52px;border-radius:50%;background:#7a5aa8;color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.guide-icon svg{width:30px;height:30px}
+.guide-lede{margin:0;font-size:16.5px;line-height:1.65;max-width:72ch}
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;align-items:start}
+.track{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.track-top h3{margin:2px 0 0;font-family:var(--display);font-size:28px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.big-count{display:flex;align-items:center;gap:14px;background:var(--paper);border:1.5px solid var(--ink);border-radius:10px;padding:10px 14px;box-shadow:3px 3px 0 var(--accent)}
+.big-count b{font-family:var(--display);font-size:46px;font-weight:700;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.big-count span{font-weight:600;font-size:14.5px;line-height:1.35}
+.track .steps{max-width:none}
+.track .tip{margin:0}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none}
+.btn.ghost:hover{background:var(--ink);color:var(--bg);border-color:var(--ink);box-shadow:none}
+.more{display:flex;flex-direction:column;gap:4px;border-top:1px dashed var(--line);padding-top:14px;font-size:14.5px}
+.more span{color:var(--muted)}
+.worth{background:var(--ink);color:var(--bg);border-radius:12px;padding:20px 22px;box-shadow:4px 4px 0 var(--accent)}
+.worth h3{margin:0 0 8px;font-family:var(--display);font-size:26px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.worth p{margin:0;max-width:72ch;line-height:1.6}
+.worth b{color:color-mix(in srgb,var(--accent) 55%,var(--bg))}
+.worth .sign{margin-top:10px;font:500 13px var(--mono);opacity:.8}
+.oms1-banner{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--ink);border-radius:10px;padding:12px 16px;box-shadow:3px 3px 0 #7a5aa8;transition:transform .15s}
+.oms1-banner:hover{transform:translateY(-2px)}
+.oms1-banner b{font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:.02em}
+.oms1-banner span:last-child{color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
@@ -273,6 +301,7 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
     <a class="brand" href="#" data-view="lists"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="1.5" y="1.5" width="29" height="29" rx="6" fill="var(--accent)"/><path d="M5,24 L12,12 L16,18 L19,14 L27,24 Z" fill="var(--paper)"/><text x="16" y="11" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="8" font-weight="500" fill="var(--paper)">10</text></svg>Table 10 Deck</a>
     <nav aria-label="Site">
       <a href="#" data-view="lists" id="nav-lists">Card lists</a>
+      <a href="#oms1" data-view="oms1" id="nav-oms1">OMS1</a>
       <a href="#how-to" data-view="howto" id="nav-howto">How to &amp; Why</a>
       <a href="#addons" data-view="addons" id="nav-addons">Add-ons</a>
       <a href="#playlists" data-view="playlists" id="nav-playlists">Playlists</a>
@@ -309,6 +338,7 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
   <div id="view-lists" class="view">
     <div class="legend"><b>Trail rating</b><span>by card count</span><span id="legendMarks"></span></div>
     <main>
+      <a class="oms1-banner hide-search" href="#oms1"><span class="lk-kind">OMS1?</span><b>Start with the MIID guide</b><span>Sketchy micro + Bootcamp immunology, about 900 cards each →</span></a>
       <details class="how hide-search">
         <summary>How to use a list</summary>
         <ol>
@@ -321,6 +351,69 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
       <section class="hide-search"><h2 class="sec">Latest lists <small>newest first</small></h2><div class="latest" id="latest"></div></section>
       <section class="hide-search"><h2 class="sec">Pick your trail <small>click a course</small></h2><div class="grid" id="grid"></div></section>
       <section id="open" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <div id="view-oms1" class="view" hidden>
+    <main>
+      <section class="why-intro">
+        <h2 class="sec">For the OMS1s <small>from the OMS2s at Table 10</small></h2>
+        <p class="why-lede">We've been where you are. These are the guides we wish someone had handed us: what to use for each course, in what order, and how many cards it actually is. We'll add more courses as you get to them.</p>
+      </section>
+
+      <section class="guide" id="miid">
+        <div class="guide-head">
+          <span class="guide-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="8.5" width="13" height="7" rx="3.5" fill="currentColor"/><path d="M18,11 C20,10 21,12 23,11 M18,13 C20,14 21,12 23,13 M5,10.5 C3.5,9 2.5,10 1,8.5 M5,13.5 C3.5,15 2.5,14 1,15.5"/></svg></span>
+          <div><h2>MIID</h2><p>Microbiology &amp; Immunology</p></div>
+        </div>
+        <p class="guide-lede">MIID has a reputation for being tedious, and it's earned: a lot of bugs, toxins, cells and pathways. But it's also the base everything else sits on. Infections show up in every organ-system block, every board exam and every rotation, and you'll use your immunology for the rest of your career. In CV/Resp II alone, we had lectures on infective endocarditis, viral pneumonia, antituberculosis drugs and HIV drugs, and every one assumed you already knew your bugs. Build it right now and it pays you back for years.</p>
+
+        <div class="tracks">
+          <article class="track">
+            <div class="track-top">
+              <span class="lk-kind">Micro · Sketchy</span>
+              <h3>Microbiology</h3>
+            </div>
+            <div class="big-count"><b>~900</b><span>cards in the whole pepper deck. Sounds like a lot. It isn't.</span></div>
+            <ol class="steps">
+              <li><b>Download the Sketchy pepper deck</b> and open the file to add it to Anki (or use <b>File → Import</b> in Anki).</li>
+              <li><b>Get the Sketchy free trial</b> so you can watch the micro videos.</li>
+              <li><b>Watch the Sketchy Micro videos for the bugs in that day's lecture.</b> Then go to Anki's <b>Browse</b> window and find that bug in the <b>Sketchy pepper deck</b> section, near the bottom of the left-hand sidebar.</li>
+            </ol>
+            <div class="actions">
+              <a class="btn" href="https://drive.google.com/file/d/1HUlW5YYkmfiSAPamubqLnaPFS7CjWBbv/view" target="_blank" rel="noopener">Download pepper deck ↗</a>
+              <a class="btn ghost" href="https://www.sketchy.com" target="_blank" rel="noopener">Sketchy free trial ↗</a>
+            </div>
+            <p class="tip"><b>Only want the bugs you've covered?</b> Right after importing, select the whole pepper deck in Browse and suspend it (<kbd>Ctrl/⌘</kbd>+<kbd>J</kbd>). Then unsuspend each bug's cards after you watch its video.</p>
+            <div class="more">
+              <b>Want more reps?</b>
+              <span>The pepper deck is enough for the course. If you want to be rock solid, the AnKing deck also has cards tagged to each Sketchy video. In Browse, go to <b>Tags → AK_Step1_v12 → Sketchy</b>, find the same video, and unsuspend those cards too. It's extra exposure to the same bug from a different angle.</span>
+            </div>
+          </article>
+
+          <article class="track">
+            <div class="track-top">
+              <span class="lk-kind">Immunology · Bootcamp</span>
+              <h3>Immunology</h3>
+            </div>
+            <div class="big-count"><b>~900</b><span>AnKing cards for all of Bootcamp immunology. Very doable.</span></div>
+            <ol class="steps">
+              <li><b>Watch Bootcamp's free immunology lecture series</b> on YouTube.</li>
+              <li><b>Unlock the AnKing cards for each lecture after you watch it.</b> In Anki, open <b>Browse</b>, click <b>Tags</b> in the left sidebar, then <b>AK_Step1_v12 → Bootcamp → Immunology</b>. Click that lecture, select all its cards (<kbd>Ctrl/⌘</kbd>+<kbd>A</kbd>), and unsuspend them (<kbd>Ctrl/⌘</kbd>+<kbd>J</kbd>).</li>
+            </ol>
+            <div class="actions">
+              <a class="btn" href="https://www.youtube.com/watch?v=rbM7xo4GHYg" target="_blank" rel="noopener">Bootcamp immunology on YouTube ↗</a>
+            </div>
+            <p class="tip"><b>Watch first, then unlock.</b> Unsuspend a lecture's cards only after you've watched it, so every card is something you've already learned once.</p>
+          </article>
+        </div>
+
+        <div class="worth">
+          <h3>Why it's worth it</h3>
+          <p>Both halves of MIID come to about <b>1,800 cards total</b>, spread over the whole course. For comparison, one OMS2 pharm lecture on this site, Drugs for Rheumatic Diseases, is 510 cards by itself. Do the micro and immuno cards now and they stay in your reviews through Level 1, your shelves and Level 2, instead of being something you have to cram again later.</p>
+          <p class="sign">— The OMS2s at Table 10</p>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -672,8 +765,8 @@ $('grid').addEventListener('click', e => {
 $('q').addEventListener('input', () => { if($('view-lists').hidden) showView('lists'); renderOpen(); });
 
 // ---------- views + routing ----------
-const VIEWS = ['lists','howto','addons','playlists'];
-const VIEW_HASH = {howto: 'how-to', addons: 'addons', playlists: 'playlists'};
+const VIEWS = ['lists','oms1','howto','addons','playlists'];
+const VIEW_HASH = {oms1: 'oms1', howto: 'how-to', addons: 'addons', playlists: 'playlists'};
 function showView(v){
   VIEWS.forEach(x => { $('view-' + x).hidden = x !== v; $('nav-' + x).classList.toggle('on', x === v); });
   if(v === 'playlists') loadPlaylists();
