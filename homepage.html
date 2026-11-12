@@ -293,6 +293,13 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
 .oms1-banner:hover{transform:translateY(-2px)}
 .oms1-banner b{font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:.02em}
 .oms1-banner span:last-child{color:var(--muted);font-size:14px}
+.ticker{position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:15;display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--ink);border-radius:999px;padding:5px 12px 5px 10px;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);box-shadow:2px 2px 0 var(--ink)}
+.ticker b{color:var(--ink);font-size:13px;font-weight:500;letter-spacing:0;font-variant-numeric:tabular-nums}
+.tk-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none;animation:tkpulse 2.4s ease-in-out infinite}
+@keyframes tkpulse{0%,100%{opacity:1}50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.tk-dot{animation:none}}
+@media (max-width:560px){.ticker{font-size:9.5px;padding:4px 10px 4px 8px;gap:6px}.ticker b{font-size:12px}}
+footer .inner{padding-bottom:64px}
 </style>
 </head>
 <body>
@@ -381,7 +388,7 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
               <li><b>Watch the Sketchy Micro videos for the bugs in that day's lecture.</b> Then go to Anki's <b>Browse</b> window and find that bug in the <b>Sketchy pepper deck</b> section, near the bottom of the left-hand sidebar.</li>
             </ol>
             <div class="actions">
-              <a class="btn" href="https://drive.google.com/file/d/1HUlW5YYkmfiSAPamubqLnaPFS7CjWBbv/view" target="_blank" rel="noopener">Download pepper deck ↗</a>
+              <a class="btn" href="https://drive.google.com/file/d/1wVIR5PFwa3P5KO4Wv7Cl0yVbn193W1_l/view" target="_blank" rel="noopener">Download pepper deck ↗</a>
               <a class="btn ghost" href="https://www.sketchy.com" target="_blank" rel="noopener">Sketchy free trial ↗</a>
             </div>
             <p class="tip"><b>Only want the bugs you've covered?</b> Right after importing, select the whole pepper deck in Browse and suspend it (<kbd>Ctrl/⌘</kbd>+<kbd>J</kbd>). Then unsuspend each bug's cards after you watch its video.</p>
@@ -561,6 +568,7 @@ nav .pill.done{background:var(--green);border-color:var(--green);color:#fff}
 </footer>
 
 <div class="toast" id="toast" role="status" hidden></div>
+<div class="ticker" id="ticker" title="Counts each browser once" hidden><span class="tk-dot" aria-hidden="true"></span><span class="tk-label">MCOM students helped</span><b id="tkNum">0</b></div>
 <div class="copybox" id="copybox" hidden>
   <div class="copybox-in" role="dialog" aria-modal="true" aria-labelledby="copyboxTitle">
     <h2 id="copyboxTitle">Copy this</h2>
@@ -820,6 +828,32 @@ const nuke = $('nuke'), cover = $('nukeCover');
 cover.addEventListener('click', () => { const o = !nuke.classList.contains('open'); nuke.classList.toggle('open', o); cover.setAttribute('aria-expanded', o); });
 
 renderGrid(); renderOpen(); route(COURSES.some(c => '#' + c.slug === location.hash));
+
+// ---------- "MCOM students helped" ticker ----------
+// Free counter at abacus.jasoncameron.dev. Each browser is counted once, then only reads the total.
+(function(){
+  const NS = 'table10deck-rvu', KEY = 'students-helped', BASE = 'https://abacus.jasoncameron.dev';
+  let counted = false;
+  try { counted = localStorage.getItem('t10-counted') === '1'; } catch(e){}
+  fetch(`${BASE}/${counted ? 'get' : 'hit'}/${NS}/${KEY}`)
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(d => {
+      if(typeof d.value !== 'number') return;
+      if(!counted){ try { localStorage.setItem('t10-counted', '1'); } catch(e){} }
+      show(d.value);
+    })
+    .catch(() => {});
+  function show(n){
+    const el = $('tkNum'); $('ticker').hidden = false;
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches || n < 2){ el.textContent = fmt(n); return; }
+    const t0 = performance.now(), dur = 1300;
+    (function step(now){
+      const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(Math.round(n * e));
+      if(k < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+})();
 
 // topographic hero
 (function(){
